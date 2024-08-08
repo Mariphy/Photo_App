@@ -2,4 +2,4 @@
 
 ## Description
 
-RESTful API built with Node.ja and Express.js 
+RESTful API built with Node.js and Express.js 
