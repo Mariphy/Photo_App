@@ -1,7 +1,10 @@
 const express = require('express');
-const sequelize = require('./config/db');
+const sequelize = require('./config');
 require('dotenv').config();
 const app = express();
+const userRouter = require('./routes/users')
+
+app.use('api/users', userRouter);
 
 async function connectToPostgres() {
     try {
