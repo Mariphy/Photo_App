@@ -4,6 +4,9 @@ require('dotenv').config();
 const app = express();
 const userRouter = require('./routes/users')
 
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
 app.use('api/users', userRouter);
 
 async function connectToPostgres() {
