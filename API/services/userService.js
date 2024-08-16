@@ -1,9 +1,9 @@
-const Models = require('../models/sequelize');
+const User = require('../models/sequelize');
 
 class UserService {
 
     constructor(sequelize) {
-        Models(sequelize);
+        //User(sequelize);
         //this.client = sequelize;
         this.models = sequelize.models;
     }
