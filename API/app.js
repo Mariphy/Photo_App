@@ -7,8 +7,6 @@ const userRouter = require('./routes/users')
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-app.use('api/users', userRouter);
-
 async function connectToPostgres() {
     try {
         await sequelize.authenticate();
@@ -20,7 +18,7 @@ async function connectToPostgres() {
 }
 connectToPostgres();
 
-
+app.use('/api/users', userRouter);
 
 
 
