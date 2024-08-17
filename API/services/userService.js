@@ -1,10 +1,9 @@
-const User = require('../models/sequelize');
+const { User } = require('../models/sequelize');
 
 class UserService {
 
     constructor(sequelize) {
-        //User(sequelize);
-        //this.client = sequelize;
+        this.client = sequelize;
         this.models = sequelize.models;
     }
 
@@ -18,13 +17,14 @@ class UserService {
             });
             return user;
         } catch (error) {
-            throw new Error('Error creating user');
+            console.log(error)
+            //throw new Error('Error creating user');
         }
     }
 
     async getUserById (id) {
         try {
-            const user = await User.findByPk(id);
+            const user = await this.models.User.findByPk(id);
             return user;
         } catch (error) {
             throw new Error('Error fetching user');
@@ -33,7 +33,7 @@ class UserService {
 
     async updateUser(id, userData) {
         try {
-            const user = await User.findByPk(id);
+            const user = await this.models.User.findByPk(id);
             if (user) {
                 await user.update(userData);
                 return user;
@@ -46,7 +46,7 @@ class UserService {
 
     async deleteUser(id) {
         try {
-            const user = await User.findByPk(id);
+            const user = await this.models.User.findByPk(id);
             if (user) {
                 await user.destroy();
                 return true;
