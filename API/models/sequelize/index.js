@@ -60,4 +60,4 @@ const Photo = sequelize.define('Photo', {
 
 sequelize.sync();
 
-module.exports = { User, Photo };
+module.exports = User;
