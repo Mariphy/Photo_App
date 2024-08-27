@@ -3,6 +3,7 @@ const sequelize = require('./config');
 require('dotenv').config();
 const app = express();
 const userRouter = require('./routes/users')
+const photoRouter = require('./routes/photos')
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -19,7 +20,7 @@ async function connectToPostgres() {
 connectToPostgres();
 
 app.use('/api/users', userRouter);
-
+app.use('api/photos', photoRouter);
 
 
 module.exports = app;
