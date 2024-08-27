@@ -17,8 +17,16 @@ class UserService {
             });
             return user;
         } catch (error) {
-            console.log(error)
-            //throw new Error('Error creating user');
+            throw new Error('Error creating user');
+        }
+    }
+
+    async getUsers() {
+        try {
+            const users = await this.models.User.findAll();
+            return users;
+        } catch (error) {
+            throw new Error('Error fetching users');
         }
     }
 
