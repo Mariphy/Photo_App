@@ -1,8 +1,10 @@
 const express = require('express');
 const UserService = require('../services/userService')
 const userRouter = express.Router();
-const sequelize = require('../config/index');
-const User = require('../models/sequelize/index');
+const sequelize = require('../config/sequelize');
+const User = require('../models/sequelize/user');
+const passport = require('passport');
+const { hashPassword } = require('../utils/hash');
 
 const userService = new UserService(sequelize);
 
@@ -26,33 +28,47 @@ userRouter.get('/:id', async (req, res) => {
   }
 });  
 
-userRouter.put('/:id', async (req, res) => {
+userRouter.put('/:id', passport.authenticate('local', { session: false }), async (req, res) => {
   try {
     const user = await userService.updateUser(req.params.id, req.body);
     res.status(200).send(user);
-  } catch(error) {
+  } catch (error) {
     res.status(500);
     console.log(error);
   }
-});  
+}); 
 
-userRouter.post('/', async (req, res) => {
-    try {
-        const user = await userService.createUser(req.body);
-        res.status(201).send(user);
-    } catch(error) {
-        throw new Error('Error creating user');
-    }
+userRouter.post('/register', async (req, res) => {
+  try {
+    const { firstName, lastName, email, password } = req.body;
+    const hashedPassword = await hashPassword(password);
+    const user = await userService.createUser({ firstName, lastName, email, password: hashedPassword });
+    res.status(201).send(user);
+  } catch (error) {
+    throw new Error('Error creating user');
+  }
 });
 
-userRouter.delete('/:id', async (req, res) => {
+userRouter.delete('/:id', passport.authenticate('local', { session: false }), async (req, res) => {
   try {
     const user = await userService.deleteUser(req.params.id);
     res.status(200).send('User deleted');
-  } catch(error) {
+  } catch (error) {
     res.status(500);
     console.log(error);
   }
-});  
+});
+
+userRouter.post('/login', passport.authenticate('local', {
+  successRedirect: '/api/users/profile',
+  failureRedirect: '/api/users/login',
+}));
+
+userRouter.get('/profile', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/api/users/login');
+  }
+  res.send(`Hello, ${req.user.firstname}`);
+});
 
 module.exports = userRouter;

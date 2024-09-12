@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('../models/user');
+const User = require('../models/sequelize/user');
 const { comparePassword } = require('../utils/hash');
 
 passport.use(new LocalStrategy(
