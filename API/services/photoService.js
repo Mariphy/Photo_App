@@ -1,4 +1,4 @@
-const { Photo } = require('../models/sequelize');
+const { Photo } = require('../models/sequelize/user');
 
 class PhotoService {
 

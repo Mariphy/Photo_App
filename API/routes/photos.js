@@ -1,8 +1,8 @@
 const express = require('express');
 const PhotoService = require('../services/photoService')
 const photoRouter = express.Router();
-const sequelize = require('../config/index');
-const Photo = require('../models/sequelize/index');
+const sequelize = require('../config/sequelize');
+const Photo = require('../models/sequelize/user');
 
 const photoService = new PhotoService(sequelize);
 
