@@ -1,28 +1,28 @@
-const express = require('express');
-const sequelize = require('./config/sequelize');
+import express, { urlencoded, json } from 'express';
+import { authenticate } from './config/sequelize';
 require('dotenv').config();
-const userRouter = require('./routes/users');
-const photoRouter = require('./routes/photos');
-const passport = require('./config/passport'); 
-const session = require('express-session');
-const helmet = require('helmet');
-const OAuth2Server = require('@node-oauth/oauth2-server');
-const oauth = require('./config/oauth');
+import userRouter from './routes/users';
+import photoRouter from './routes/photos';
+import { initialize, session as _session } from './config/passport'; 
+import session, { MemoryStore } from 'express-session';
+import helmet from 'helmet';
+import OAuth2Server, { Request, Response } from '@node-oauth/oauth2-server';
+import { model as _model } from './config/oauth';
 
 const PORT = process.env.PORT || 4001;
 const app = express();
 
 app.oauth = new OAuth2Server({
-    model: oauth.model,
+    model: _model,
     grants: ['authorization_code', 'password', 'refresh_token'],
     accessTokenLifetime: 3600,
     refreshTokenLifetime: 1209600
 });
 
 app.use(helmet());
-app.use(express.urlencoded({extended: true}));
-app.use(express.json());
-const store = new session.MemoryStore();
+app.use(urlencoded({extended: true}));
+app.use(json());
+const store = new MemoryStore();
 app.use(
   session ({
   secret: process.env.SESSION_SECRET,
@@ -33,12 +33,12 @@ app.use(
   resave: false,
   store
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(initialize());
+app.use(_session());
 
 async function connectToPostgres() {
     try {
-        await sequelize.authenticate();
+        await authenticate();
         console.log('Connection has been established successfully.');
         return ('Connection has been established successfully.');
     } catch (error) {
@@ -58,8 +58,8 @@ app.get('/oauth2/authorize', (req, res) => {
   });
   
  app.post('/oauth2/token', async (req, res, next) => {
-    const request = new OAuth2Server.Request(req);
-    const response = new OAuth2Server.Response(res);
+    const request = new Request(req);
+    const response = new Response(res);
 
     try {
         const token = await app.oauth.token(req, res);
@@ -69,7 +69,7 @@ app.get('/oauth2/authorize', (req, res) => {
     }
 });
 
-module.exports = app;
+export default app;
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);

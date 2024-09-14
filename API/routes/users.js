@@ -1,10 +1,10 @@
-const express = require('express');
-const UserService = require('../services/userService')
-const userRouter = express.Router();
-const sequelize = require('../config/sequelize');
-const User = require('../models/sequelize/user');
-const passport = require('passport');
-const { hashPassword } = require('../utils/hash');
+import { Router } from 'express';
+import UserService from '../services/userService';
+const userRouter = Router();
+import sequelize from '../config/sequelize';
+import User from '../models/sequelize/user';
+import { authenticate } from 'passport';
+import { hashPassword } from '../utils/hash';
 
 const userService = new UserService(sequelize);
 
@@ -21,14 +21,14 @@ userRouter.post('/register', async (req, res) => {
 });
 
 //Passport redirects the user to http://localhost:4001/oauth2/authorize
-userRouter.get('/auth/oauth2', passport.authenticate('oauth2'));
+userRouter.get('/auth/oauth2', authenticate('oauth2'));
 
-userRouter.get('/auth/callback', passport.authenticate('oauth2', {
+userRouter.get('/auth/callback', authenticate('oauth2', {
   successRedirect: '/api/users/profile',
   failureRedirect: '/api/users/login',
 }));
 
-userRouter.post('/login', passport.authenticate('local', {
+userRouter.post('/login', authenticate('local', {
   successRedirect: '/api/users/profile',
   failureRedirect: '/api/users/login',
 }));
@@ -65,7 +65,7 @@ userRouter.get('/:id', async (req, res) => {
   }
 });  
 
-userRouter.put('/:id', passport.authenticate('local', { session: false }), async (req, res) => {
+userRouter.put('/:id', authenticate('local', { session: false }), async (req, res) => {
   try {
     const user = await userService.updateUser(req.params.id, req.body);
     res.status(200).send(user);
@@ -75,7 +75,7 @@ userRouter.put('/:id', passport.authenticate('local', { session: false }), async
   }
 }); 
 
-userRouter.delete('/:id', passport.authenticate('local', { session: false }), async (req, res) => {
+userRouter.delete('/:id', authenticate('local', { session: false }), async (req, res) => {
   try {
     const user = await userService.deleteUser(req.params.id);
     res.status(200).send('User deleted');
@@ -85,4 +85,4 @@ userRouter.delete('/:id', passport.authenticate('local', { session: false }), as
   }
 });
 
-module.exports = userRouter;
+export default userRouter;

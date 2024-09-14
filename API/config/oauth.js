@@ -1,14 +1,14 @@
-const OAuth2Server = require('@node-oauth/oauth2-server');
-const User = require('../models/sequelize/user');
-const AccessToken = require('../models/sequelize/accessToken');
-const Client = require('../models/sequelize/client');
-const { comparePassword } = require('../utils/hash');
+import OAuth2Server from '@node-oauth/oauth2-server';
+import { findOne } from '../models/sequelize/user';
+import { findOne as _findOne, create } from '../models/sequelize/accessToken';
+import { findOne as __findOne } from '../models/sequelize/client';
+import { comparePassword } from '../utils/hash';
 
 const oauth = {
   model: {
     getAccessToken: async (token) => {
         try {
-          const accessToken = await AccessToken.findOne({ where: { token } });
+          const accessToken = await _findOne({ where: { token } });
           return accessToken ? accessToken.toJSON() : null;
         } catch (error) {
           console.error('Error getting access token:', error);
@@ -17,7 +17,7 @@ const oauth = {
     },
     getClient: async (clientId, clientSecret) => {
         try {
-          const client = await Client.findOne({ where: { id: clientId, clientSecret } });
+          const client = await __findOne({ where: { id: clientId, clientSecret } });
           return client ? client.toJSON() : null;
         } catch (error) {
           console.error('Error getting client:', error);
@@ -26,7 +26,7 @@ const oauth = {
     },
     saveToken: async (token, client, user) => {
         try {
-          const accessToken = await AccessToken.create({
+          const accessToken = await create({
             token: token.accessToken,
             clientId: client.id,
             userId: user.id,
@@ -40,7 +40,7 @@ const oauth = {
     },
     getUser: async (email, password) => {
         try {
-          const user = await User.findOne({ where: { email } });
+          const user = await findOne({ where: { email } });
           if (user && await comparePassword(password, user.password)) {
             return user.toJSON();
           }
@@ -53,4 +53,4 @@ const oauth = {
   },
 };
 
-module.exports = oauth;
+export default oauth;
