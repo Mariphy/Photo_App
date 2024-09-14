@@ -20,6 +20,14 @@ userRouter.post('/register', async (req, res) => {
   }
 });
 
+//Passport redirects the user to http://localhost:4001/oauth2/authorize
+userRouter.get('/auth/oauth2', passport.authenticate('oauth2'));
+
+userRouter.get('/auth/callback', passport.authenticate('oauth2', {
+  successRedirect: '/api/users/profile',
+  failureRedirect: '/api/users/login',
+}));
+
 userRouter.post('/login', passport.authenticate('local', {
   successRedirect: '/api/users/profile',
   failureRedirect: '/api/users/login',
