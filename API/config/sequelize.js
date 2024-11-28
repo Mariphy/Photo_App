@@ -5,10 +5,10 @@ dotenv.config();
 
 
 const sequelize = new Sequelize({
-  host: 'localhost',
-  dialect: 'postgres',
-  port: 5432,
-  database: 'PhotoApp',
+  host: process.env.HOST,
+  dialect: process.env.DIALECT,
+  port: process.env.PORT,
+  database: process.env.DATABASE_NAME,
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD
   });
