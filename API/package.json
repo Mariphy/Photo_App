@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Simple Node/Express API with authentication and authorization features",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",

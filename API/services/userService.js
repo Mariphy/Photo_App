@@ -1,4 +1,4 @@
-const { User } = require('../models/sequelize/user');
+import { User } from '../models/sequelize';
 
 class UserService {
 
@@ -66,4 +66,4 @@ class UserService {
     }
 };
 
-module.exports = UserService;
+export default UserService;

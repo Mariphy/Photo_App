@@ -1,4 +1,4 @@
-const { Photo } = require('../models/sequelize/user');
+import { Photo } from '../models/sequelize/photo';
 
 class PhotoService {
 
@@ -66,4 +66,4 @@ class PhotoService {
     }
 };
 
-module.exports = PhotoService;
+export default PhotoService;

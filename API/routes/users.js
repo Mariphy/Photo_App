@@ -1,11 +1,10 @@
 import { Router } from 'express';
 import UserService from '../services/userService';
-const userRouter = Router();
 import sequelize from '../config/sequelize';
-import User from '../models/sequelize/user';
 import { authenticate } from 'passport';
 import { hashPassword } from '../utils/hash';
 
+const userRouter = Router();
 const userService = new UserService(sequelize);
 
 userRouter.post('/register', async (req, res) => {

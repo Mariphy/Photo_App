@@ -1,5 +1,5 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/sequelize');
+import { DataTypes } from 'sequelize';
+import sequelize from '../../config/sequelize'; 
 
 const AccessToken = sequelize.define('AccessToken', {
   token: {
@@ -22,4 +22,4 @@ const AccessToken = sequelize.define('AccessToken', {
 
 sequelize.sync();
 
-module.exports = AccessToken;
+export default AccessToken;

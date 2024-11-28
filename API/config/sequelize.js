@@ -1,5 +1,8 @@
-const { Sequelize } = require('sequelize');
-require('dotenv').config();
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const sequelize = new Sequelize({
   host: 'localhost',
@@ -10,4 +13,4 @@ const sequelize = new Sequelize({
   password: process.env.POSTGRES_PASSWORD
   });
 
-module.exports = sequelize;
+export default sequelize;

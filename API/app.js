@@ -1,13 +1,15 @@
 import express, { urlencoded, json } from 'express';
-import { authenticate } from './config/sequelize';
-require('dotenv').config();
-import userRouter from './routes/users';
-import photoRouter from './routes/photos';
-import { initialize, session as _session } from './config/passport'; 
+//import { authenticate } from 'passport';
+import dotenv from 'dotenv';
+import userRouter from './routes/users.js';
+import photoRouter from './routes/photos.js';
+import { initialize, session as _session } from './config/passport.js'; 
 import session, { MemoryStore } from 'express-session';
 import helmet from 'helmet';
 import OAuth2Server, { Request, Response } from '@node-oauth/oauth2-server';
-import { model as _model } from './config/oauth';
+import { model as _model } from './config/oauth.js';
+
+dotenv.config();
 
 const PORT = process.env.PORT || 4001;
 const app = express();
@@ -69,8 +71,8 @@ app.get('/oauth2/authorize', (req, res) => {
     }
 });
 
-export default app;
-
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
+
+export default app;

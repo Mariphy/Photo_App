@@ -1,10 +1,9 @@
-const express = require('express');
-const PhotoService = require('../services/photoService')
-const photoRouter = express.Router();
-const sequelize = require('../config/sequelize');
-const Photo = require('../models/sequelize/user');
+import express from 'express';
+import PhotoService from '../services/photoService';
+import sequelize from '../config/sequelize';
 
 const photoService = new PhotoService(sequelize);
+const photoRouter = express.Router();
 
 photoRouter.get('/', async (req, res) => {
     try {
@@ -54,4 +53,4 @@ photoRouter.delete('/:id', async (req, res) => {
   }
 });  
 
-module.exports = photoRouter;
+export default photoRouter;
