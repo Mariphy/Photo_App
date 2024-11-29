@@ -1,10 +1,10 @@
-import { Photo } from '../models/sequelize/photo';
+import Photo from '../models/sequelize/photo.js';
 
 class PhotoService {
 
     constructor(sequelize) {
         this.client = sequelize;
-        this.models = sequelize.models;
+        this.models = { Photo };
     }
 
     async createPhoto({name, url, description, user_id}) {

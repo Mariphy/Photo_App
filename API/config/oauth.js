@@ -1,8 +1,8 @@
 import OAuth2Server from '@node-oauth/oauth2-server';
-import { findOne } from '../models/sequelize/user';
-import { findOne as _findOne, create } from '../models/sequelize/accessToken';
-import { findOne as __findOne } from '../models/sequelize/client';
-import { comparePassword } from '../utils/hash';
+//import { findOne } from '../models/sequelize/user';
+//import { findOne as _findOne, create } from '../models/sequelize/accessToken';
+//import { findOne as __findOne } from '../models/sequelize/client';
+//import { comparePassword } from '../utils/hash';
 
 const oauth = {
   model: {

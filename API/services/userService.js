@@ -1,10 +1,10 @@
-import { User } from '../models/sequelize';
+import User from '../models/sequelize/user.js';
 
 class UserService {
 
     constructor(sequelize) {
         this.client = sequelize;
-        this.models = sequelize.models;
+        this.models = { User };
     }
 
     async createUser({firstName, lastName, email, password}) {

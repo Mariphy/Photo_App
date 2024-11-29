@@ -1,6 +1,6 @@
 import express from 'express';
-import PhotoService from '../services/photoService';
-import sequelize from '../config/sequelize';
+import PhotoService from '../services/photoService.js';
+import sequelize from '../config/sequelize.js';
 
 const photoService = new PhotoService(sequelize);
 const photoRouter = express.Router();

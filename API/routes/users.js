@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import UserService from '../services/userService';
-import sequelize from '../config/sequelize';
-import { authenticate } from 'passport';
-import { hashPassword } from '../utils/hash';
+import UserService from '../services/userService.js';
+import sequelize from '../config/sequelize.js';
+import passport from 'passport';
+import { hashPassword } from '../utils/hash.js';
 
 const userRouter = Router();
 const userService = new UserService(sequelize);
@@ -19,15 +19,17 @@ userRouter.post('/register', async (req, res) => {
   }
 });
 
+/*
 //Passport redirects the user to http://localhost:4001/oauth2/authorize
-userRouter.get('/auth/oauth2', authenticate('oauth2'));
+userRouter.get('/auth/oauth2', passport.authenticate('oauth2'));
 
-userRouter.get('/auth/callback', authenticate('oauth2', {
+userRouter.get('/auth/callback', passport.authenticate('oauth2', {
   successRedirect: '/api/users/profile',
   failureRedirect: '/api/users/login',
 }));
+*/
 
-userRouter.post('/login', authenticate('local', {
+userRouter.post('/login', passport.authenticate('local', {
   successRedirect: '/api/users/profile',
   failureRedirect: '/api/users/login',
 }));
@@ -48,7 +50,7 @@ userRouter.get('/', async (req, res) => {
     const users = await userService.getUsers();
     res.status(200).send(users);
   } catch(error) {
-    res.status(500);
+    res.status(500).send('Error fetching user');
     console.log(error);
   }
 });    
@@ -59,22 +61,22 @@ userRouter.get('/:id', async (req, res) => {
     const user = await userService.getUserById(req.params.id);
     res.status(200).send(user);
   } catch(error) {
-    res.status(500);
+    res.status(500).send('Error updating user');
     console.log(error);
   }
 });  
 
-userRouter.put('/:id', authenticate('local', { session: false }), async (req, res) => {
+userRouter.put('/:id', passport.authenticate('local', { session: false }), async (req, res) => {
   try {
     const user = await userService.updateUser(req.params.id, req.body);
     res.status(200).send(user);
   } catch (error) {
-    res.status(500);
+    res.status(500).send('Error deleting user');
     console.log(error);
   }
 }); 
 
-userRouter.delete('/:id', authenticate('local', { session: false }), async (req, res) => {
+userRouter.delete('/:id', passport.authenticate('local', { session: false }), async (req, res) => {
   try {
     const user = await userService.deleteUser(req.params.id);
     res.status(200).send('User deleted');

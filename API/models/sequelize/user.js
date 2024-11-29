@@ -1,12 +1,7 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../../config/sequelize'; 
+import  sequelize from '../../config/sequelize.js'; 
 
 const User = sequelize.define('User', {
-    id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
-    },
     firstName: {
         type: DataTypes.STRING,
         allowNull: false
@@ -19,21 +14,27 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
         isUnique: true,
-        isEmail: true
+        validate: {
+            isEmail: true
+        }
     },
     password: {
         type: DataTypes.STRING,
         required: true,
         allowNull: false,
-        len: [8,20]
+        validate: {
+            len: [8, 20]
+        }
+    },
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
     }
-    
   },
   {
     timestamps: false
   }
 );
-
-sequelize.sync();
 
 export default User;

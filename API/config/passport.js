@@ -1,17 +1,17 @@
-import passport, { use, serializeUser, deserializeUser } from 'passport';
+import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import OAuth2Strategy from 'passport-oauth2';
-import { findOne, findByPk } from '../models/sequelize/user';
-import { comparePassword } from '../utils/hash';
-import oauth from './oauth';
+import User from '../models/sequelize/user.js';
+import { comparePassword } from '../utils/hash.js';
+import oauth from './oauth.js';
 
-use(new LocalStrategy({
+passport.use(new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password'
 },
   async (email, password, done) => {
     try {
-      const user = await findOne({ where: { email } });
+      const user = await User.findOne({ where: { email } });
       if (!user) {
         return done(null, false, { message: 'Incorrect email.' });
       }
@@ -26,8 +26,9 @@ use(new LocalStrategy({
   }
 ));
 
+/*
 //development URLs
-use(new OAuth2Strategy({
+passport.use(new OAuth2Strategy({
   authorizationURL: 'http://localhost:4001/oauth2/authorize',
   tokenURL: 'http://localhost:4001/oauth2/token',
   clientID: process.env.CLIENT_ID,
@@ -45,14 +46,15 @@ use(new OAuth2Strategy({
       return done(err);
     }
 }));
+*/
 
-serializeUser((user, done) => {
+passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-deserializeUser(async (id, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
-    const user = await findByPk(id);
+    const user = await User.findByPk(id);
     done(null, user);
   } catch (err) {
     done(err);
