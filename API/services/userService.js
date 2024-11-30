@@ -1,4 +1,5 @@
 import User from '../models/sequelize/user.js';
+import { hashPassword } from '../utils/hash.js';
 
 class UserService {
 
@@ -9,11 +10,12 @@ class UserService {
 
     async createUser({firstName, lastName, email, password}) {
         try {
+            const hashedPassword = await hashPassword(password);
             const user = await this.models.User.create({
                 firstName, 
                 lastName, 
                 email, 
-                password
+                hashedPassword
             });
             return user;
         } catch (error) {

@@ -2,7 +2,6 @@ import { Router } from 'express';
 import UserService from '../services/userService.js';
 import sequelize from '../config/sequelize.js';
 import passport from 'passport';
-import { hashPassword } from '../utils/hash.js';
 
 const userRouter = Router();
 const userService = new UserService(sequelize);
@@ -10,8 +9,7 @@ const userService = new UserService(sequelize);
 userRouter.post('/register', async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-    const hashedPassword = await hashPassword(password);
-    const user = await userService.createUser({ firstName, lastName, email, password: hashedPassword });
+    const user = await userService.createUser({ firstName, lastName, email, password });
     res.status(201).send(user);
   } catch (error) {
     console.error('Error during registration:', error);
@@ -42,7 +40,7 @@ userRouter.get('/profile', (req, res) => {
 });
 
 userRouter.get('/login', (req, res) => {
-  res.send('Login Page');
+  res.send('Logged-in Page');
 }); 
 
 userRouter.get('/', async (req, res) => {
