@@ -18,12 +18,11 @@ const User = sequelize.define('User', {
             isEmail: true
         }
     },
-    password: {
-        type: DataTypes.STRING,
-        required: true,
+    hashedPassword: {
+        type: DataTypes.STRING(64),
         allowNull: false,
         validate: {
-            len: [8, 20]
+            is: /^[0-9a-f]{64}$/i, // Ensures the value is a 64-character hexadecimal string
         }
     },
     id: {
@@ -36,5 +35,7 @@ const User = sequelize.define('User', {
     timestamps: false
   }
 );
+
+sequelize.sync();
 
 export default User;
