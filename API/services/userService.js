@@ -15,7 +15,7 @@ class UserService {
                 firstName, 
                 lastName, 
                 email, 
-                hashedPassword
+                password: hashedPassword
             });
             return user;
         } catch (error) {
