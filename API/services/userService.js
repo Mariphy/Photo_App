@@ -19,7 +19,8 @@ class UserService {
             });
             return user;
         } catch (error) {
-            throw new Error('Error creating user');
+            console.error('Error creating user:', error);
+            throw new Error(`Error creating user: ${error.message}`);
         }
     }
 
@@ -45,11 +46,16 @@ class UserService {
         try {
             const user = await this.models.User.findByPk(id);
             if (user) {
+                if(userData.password) {
+                    const hashedPassword = await hashPassword(password);
+                    userData.password = hashedPassword;
+                }
                 await user.update(userData);
                 return user;
             }
             throw new Error('User not found');
         } catch (error) {
+            console.error('Error updating user:', error);
             throw new Error('Error updating user');
         }
     }
