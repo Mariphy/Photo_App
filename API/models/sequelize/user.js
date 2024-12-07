@@ -20,10 +20,7 @@ const User = sequelize.define('User', {
     },
     password: {
         type: DataTypes.STRING(64),
-        allowNull: false,
-        validate: {
-            is: /^[0-9a-f]{64}$/i, // Ensures the value is a 64-character hexadecimal string
-        }
+        allowNull: false
     },
     id: {
         type: DataTypes.UUID,
