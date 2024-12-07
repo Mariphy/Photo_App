@@ -69,7 +69,7 @@ userRouter.put('/:id', passport.authenticate('local', { session: false }), async
     const user = await userService.updateUser(req.params.id, req.body);
     res.status(200).send(user);
   } catch (error) {
-    res.status(500).send('Error deleting user');
+    res.status(500).send('Error updating user');
     console.log(error);
   }
 }); 
