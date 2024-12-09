@@ -9,6 +9,10 @@ class UserService {
     }
 
     async createUser({firstName, lastName, email, password}) {
+        const existingUser = await this.models.User.findOne({ where: { email } });
+        if (existingUser) {
+            throw new Error('User already exists');
+        };
         try {
             const hashedPassword = await hashPassword(password);
             const user = await this.models.User.create({
