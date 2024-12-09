@@ -12,7 +12,6 @@ userRouter.post('/register', async (req, res) => {
     const user = await userService.createUser({ firstName, lastName, email, password });
     res.status(201).send(user);
   } catch (error) {
-    console.error('Error during registration:', error);
     res.status(500).send('Error creating user');
   }
 });
@@ -49,18 +48,15 @@ userRouter.get('/', async (req, res) => {
     res.status(200).send(users);
   } catch(error) {
     res.status(500).send('Error fetching user');
-    console.log(error);
   }
 });    
 
 userRouter.get('/:id', async (req, res) => {
   try {
-    console.log('req.params.id', req.params.id)
     const user = await userService.getUserById(req.params.id);
     res.status(200).send(user);
   } catch(error) {
     res.status(500).send('Error updating user');
-    console.log(error);
   }
 });  
 
@@ -70,7 +66,6 @@ userRouter.put('/:id', passport.authenticate('local', { session: false }), async
     res.status(200).send(user);
   } catch (error) {
     res.status(500).send('Error updating user');
-    console.log(error);
   }
 }); 
 
@@ -80,7 +75,6 @@ userRouter.delete('/:id', passport.authenticate('local', { session: false }), as
     res.status(200).send('User deleted');
   } catch (error) {
     res.status(500);
-    console.log(error);
   }
 });
 
